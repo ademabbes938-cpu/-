@@ -9,68 +9,120 @@ HTML_PAGE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الشابة - مدينة برج خديجة</title>
+    <title>الشابة | لؤلؤة المهدية</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d38b5d'/><path d='M30 80 H70 V40 L60 30 V20 H40 V30 L30 40 Z' fill='white'/></svg>">
+
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f7f6; text-align: center; }
+        :root { --main: #d38b5d; --blue: #0077be; --dark: #1a202c; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #f0f2f5; color: var(--dark); }
         
-        /* الصورة العلوية الكبيرة */
-        header { 
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-            url('https://www.tourismtunisia.com/wp-content/uploads/2016/01/mahdia.jpg'); 
-            background-size: cover; 
+        /* واجهة Dashboard احترافية */
+        .sidebar { width: 250px; background: var(--dark); height: 100vh; position: fixed; right: 0; top: 0; color: white; padding: 20px; box-sizing: border-box; display: none; }
+        
+        .main-content { margin-right: 0; padding: 0; }
+
+        /* قسم الصورة الكبيرة (Hero) */
+        .hero { 
+            height: 450px; 
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=1500');
+            background-size: cover;
             background-position: center;
-            height: 400px; 
-            color: white; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            border-bottom: 8px solid var(--main);
         }
 
-        .container { padding: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .hero h1 { font-size: 4rem; margin: 0; text-shadow: 2px 4px 10px rgba(0,0,0,0.5); }
+
+        /* كروت لوحة التحكم */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: -80px auto 50px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: 0.4s;
+            border: 1px solid #eee;
+        }
+
+        .card:hover { transform: translateY(-10px); }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-body { padding: 25px; text-align: center; }
+        .card-body h2 { color: var(--main); margin: 0 0 10px; font-size: 1.5rem; }
+        .card-body p { color: #666; line-height: 1.6; }
+
+        footer { background: var(--dark); color: white; padding: 40px; text-align: center; }
+        .badge { background: var(--main); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; }
         
-        .card { 
-            background: white; 
-            padding: 15px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            width: 350px; 
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .dashboard-grid { padding: 20px; margin-top: -40px; }
         }
-
-        /* تنسيق الصور داخل البطاقات لضمان ظهورها */
-        .card img { 
-            width: 100%; 
-            height: 220px; 
-            border-radius: 15px; 
-            object-fit: cover; /* يحافظ على أبعاد الصورة */
-            display: block;
-            background: #eee; /* لون مؤقت إذا تأخر التحميل */
-        }
-
-        h2 { color: #d38b5d; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>مدينة الشابة</h1>
-        <p>جمال الطبيعة وعراقة التاريخ</p>
-    </header>
 
-    <div class="container">
-        <div class="card">
-            <h2>برج خديجة</h2>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Borj_Khadija_Chebba.jpg/800px-Borj_Khadija_Chebba.jpg" alt="برج خديجة">
-            <p>المعلم الأثري الشامخ بمدينة الشابة.</p>
+    <div class="main-content">
+        <header class="hero">
+            <h1>الشابة - لؤلؤة الساحل</h1>
+            <p>مرحباً بك في مدينة برج خديجة التاريخي</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Borj_Khadija_Chebba.jpg/800px-Borj_Khadija_Chebba.jpg');"></div>
+                <div class="card-body">
+                    <h2>برج خديجة</h2>
+                    <p>المعلم الأثري الشامخ الذي يحرس سواحل الشابة منذ قرون. رمز الصمود والجمال الرملي.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600');"></div>
+                <div class="card-body">
+                    <h2>ميناء الصيد</h2>
+                    <p>أنشط موانئ ولاية المهدية، حيث تلتقي مراكب الصيد التقليدية مع زرقة المتوسط لتنتج أجود أنواع السمك.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=600');"></div>
+                <div class="card-body">
+                    <h2>شواطئ فيروزية</h2>
+                    <p>تمتع بأجمل لحظات الاستجمام على رمال الشابة الذهبية ومياهها الصافية التي تجذب الزوار من كل مكان.</p>
+                </div>
+            </div>
         </div>
 
-        <div class="card">
-            <h2>ميناء الشابة</h2>
-            <img src="https://st2.depositphotos.com/3362143/12093/i/950/depositphotos_120937812-stock-photo-harbor-with-fishing-boats-in.jpg" alt="الميناء">
-            <p>من أجمل موانئ الصيد في تونس.</p>
-        </div>
+        <footer>
+            <p>جميع الحقوق محفوظة لمدينة الشابة - ولاية المهدية</p>
+            <div style="margin-top: 15px;">
+                <span class="badge">تطوير: آدم - مكنين 🇹🇳</span>
+            </div>
+            <p style="opacity: 0.4; font-size: 0.7rem; margin-top: 20px;">تصميم Dashboard احترافي 2026</p>
+        </footer>
     </div>
-    
-    <footer>تطوير: آدم - مكنين 🇹🇳 2026</footer>
+
 </body>
 </html>
 '''
