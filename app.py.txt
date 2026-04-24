@@ -1,0 +1,173 @@
+from flask import Flask, render_template_string
+import os
+
+app = Flask(__name__)
+
+# كود الصفحة بتصميم احترافي لمدينة الشابة
+HTML_PAGE = '''
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشابة - مدينة برج خديجة</title>
+    
+    <!-- أيقونة البرج في المتصفح مستوحاة من الصورة التي أرفقتها -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M30 80 H70 V40 L60 30 V20 H40 V30 L30 40 Z' fill='%23d38b5d'/><rect x='45' y='15' width='10' height='5' fill='%23d38b5d'/></svg>">
+
+    <style>
+        :root {
+            --sand: #d38b5d;
+            --sea: #0077be;
+            --dark: #1a202c;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f7fafc;
+            color: var(--dark);
+        }
+
+        /* واجهة الموقع الرئيسية */
+        header {
+            height: 65vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=1500');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .tower-logo-wrap {
+            width: 80px;
+            height: 80px;
+            background: var(--sand);
+            clip-path: polygon(30% 100%, 70% 100%, 70% 40%, 60% 30%, 60% 20%, 40% 20%, 40% 30%, 30% 40%);
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        h1 { font-size: 3.5rem; margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        p.subtitle { font-size: 1.2rem; margin-top: 10px; opacity: 0.9; }
+
+        /* الأقسام (Dashboard) */
+        .dashboard {
+            max-width: 1100px;
+            margin: -60px auto 50px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 5px solid var(--sand);
+            transition: 0.3s;
+        }
+
+        .card:hover { transform: translateY(-10px); }
+        .card h2 { color: var(--sand); font-size: 1.6rem; margin-bottom: 15px; }
+        
+        .card-img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 15px 0;
+            background: #eee;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--sand);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover { background: #b57248; box-shadow: 0 5px 15px rgba(211, 139, 93, 0.4); }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .adam-tag {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 5px 20px;
+            border: 1px solid var(--sand);
+            border-radius: 20px;
+            color: var(--sand);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="tower-logo-wrap"></div>
+        <h1>مدينة الشابة</h1>
+        <p class="subtitle">جوهرة الساحل ومدينة برج خديجة التاريخي</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="card">
+            <h2>برج خديجة</h2>
+            <p>المعلم الأثري الشامخ الذي يحكي قصة مدينة الشابة وصمودها عبر العصور.</p>
+            
+            <a href="#" class="btn">استكشف التاريخ</a>
+        </div>
+
+        <div class="card">
+            <h2>ميناء الصيد</h2>
+            <p>أحد أنشط الموانئ في تونس، حيث تجتمع التقاليد مع جودة الأسماك الطازجة.</p>
+            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600" class="card-img" alt="ميناء الشابة">
+            <a href="#" class="btn">نشاط الميناء</a>
+        </div>
+
+        <div class="card">
+            <h2>البحر والجمال</h2>
+            <p>شواطئ فيروزية ساحرة تعتبر الوجهة المثالية للهدوء والجمال الطبيعي.</p>
+            <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=600" class="card-img" alt="شواطئ الشابة">
+            <a href="#" class="btn">اكتشف الشواطئ</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>موقع تعريفي لمدينة الشابة - ولاية المهدية</p>
+        <div class="adam-tag">تصميم وتطوير: آدم - مكنين 🇹🇳</div>
+        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.5;">© 2026 جميع الحقوق محفوظة</p>
+    </footer>
+
+</body>
+</html>
+'''
+
+@app.route('/')
+def index():
+    return render_template_string(HTML_PAGE)
+
+if __name__ == '__main__':
+    # Render يستخدم المتغير PORT لإطلاق التطبيق
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
